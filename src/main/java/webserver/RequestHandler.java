@@ -7,7 +7,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Map;
 
+import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.HttpRequestUtils;
@@ -33,6 +35,7 @@ public class RequestHandler extends Thread {
                 return;
             }
             String url = HttpRequestUtils.getUrl(line);
+            url = HttpRequestUtils.getRegister(url);
             DataOutputStream dos = new DataOutputStream(out);
             byte[] body = Files.readAllBytes(new File("./webapp"+url).toPath());
             response200Header(dos, body.length);
@@ -41,6 +44,8 @@ public class RequestHandler extends Thread {
             log.error(e.getMessage());
         }
     }
+
+
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
         try {
