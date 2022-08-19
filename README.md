@@ -21,7 +21,7 @@
 * 
 
 ### 요구사항 3 - post 방식으로 회원가입
-* 
+* post 방식은 서버에 Request를 보내 데이터 C(CREATE),U(UPDATE),D(DELETE)와 같은 작업을 실행할 때 유용하다는 걸 알았다.
 
 ### 요구사항 4 - redirect 방식으로 이동
 * 
