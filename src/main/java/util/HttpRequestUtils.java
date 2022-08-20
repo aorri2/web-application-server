@@ -1,16 +1,46 @@
 package util;
 
+import com.google.common.base.Strings;
+import com.google.common.collect.Maps;
+import model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.google.common.base.Strings;
-import com.google.common.collect.Maps;
-
 public class HttpRequestUtils {
+    private static final Logger log = LoggerFactory.getLogger(HttpRequestUtils.class);
+
+        private HttpRequestUtils() throws IllegalAccessException {
+            throw new IllegalAccessException("HttpRequestUtils is Utility class.");
+        }
     /**
-     * @param queryString은
-     *            URL에서 ? 이후에 전달되는 field1=value1&field2=value2 형식임
+     * @param url url값을 get 방식으로 받아서 다시 index.html로 Redirect
+     * @return
+     */
+    public static String getRegister(String url) {
+        if (url.startsWith("/user/create")) {
+            int index = url.indexOf("?");
+            String queryString = url.substring(index + 1);
+            Map<String, String> params = HttpRequestUtils.parseQueryString(queryString);
+            User user = new User(params.get("userId"), params.get("password"), params.get("name"), params.get("email"));
+            log.debug("User = {}", user);
+
+            url = "/index.html";
+        }
+        return url;
+    }
+
+    public static String getUrl(String firstLine) {
+        String path = firstLine.split(" ")[1];
+        log.debug("request path: {}", path);
+        return path;
+    }
+
+    /**
+     * @param queryString은 URL에서 ? 이후에 전달되는 field1=value1&field2=value2 형식임
      * @return
      */
     public static Map<String, String> parseQueryString(String queryString) {
@@ -18,8 +48,7 @@ public class HttpRequestUtils {
     }
 
     /**
-     * @param 쿠키
-     *            값은 name1=value1; name2=value2 형식임
+     * @param 쿠키 값은 name1=value1; name2=value2 형식임
      * @return
      */
     public static Map<String, String> parseCookies(String cookies) {
